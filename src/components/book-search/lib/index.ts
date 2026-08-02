@@ -100,6 +100,14 @@ function transformScriptureStringtoBibleParam(scripture: string) {
     )
     return ''
   }
+  const chapter = Number(bookChapter)
+  if (isNaN(chapter)) {
+    console.log(
+      `transformScriptureStringtoBibleParam: invalid chapter '${bookChapter}' in scripture string '${scripture}'`
+    )
+    return ''
+  }
+
   const bookIndex = findBookIndex(bookName) // TODO: use getBook?
   if (bookIndex < 0) {
     console.log(
@@ -109,10 +117,10 @@ function transformScriptureStringtoBibleParam(scripture: string) {
   }
   const bookNumber = bookIndex + 1
   const verse = bookVerse ? String(bookVerse).padStart(3, '0') : DEFAULT_VERSE
-  const bibleParam = `${String(bookNumber).padStart(2, '0')}${String(bookChapter).padStart(3, '0')}${verse}` // TODO: use getBibleParam
+  const bibleParam = `${String(bookNumber).padStart(2, '0')}${bookChapter.padStart(3, '0')}${verse}` // TODO: use getBibleParam
   const bibleParam2 = getBibleParam({
     bookNumber,
-    chapter: Number(bookChapter),
+    chapter,
     verse: Number(verse),
   })
   return bibleParam
