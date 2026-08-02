@@ -1,0 +1,8 @@
+{
+  "name": "s5",
+  "short_name": "s5",
+  "lang": "en-US",
+  "start_url": "/",
+  "display": "standalone",
+  "scope": "/"
+}
