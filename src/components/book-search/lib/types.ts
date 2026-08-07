@@ -5,11 +5,11 @@ export type Book = (typeof bookNumberToBookMap)[BookNumber]
 export type BookName = (typeof bookNumberToBookMap)[BookNumber]['name']
 
 export type Scripture = {
-  bibleParam: string // TODO: rename to bibleParam
+  bibleParam: string
   bookName: string
   bookNumber: number
   chapter: number
-  verse: number
+  verse: number | [number, number]
   asString?: string
 }
 
