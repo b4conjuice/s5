@@ -190,7 +190,10 @@ export function transformScripturetoBibleParam(
   if (typeof scripture === 'string') {
     return transformScriptureStringtoBibleParam(scripture)
   } else {
-    const { bookName, chapter, verse } = scripture
+    const { bookName, chapter, verse, bibleParam: maybeBibleParam } = scripture
+    if (maybeBibleParam) {
+      return maybeBibleParam
+    }
     if (!bookName || !chapter) {
       if (!bookName && !chapter) {
         console.log(
