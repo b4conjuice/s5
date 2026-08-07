@@ -125,7 +125,7 @@ function splitOnce(str: string, separator: string) {
 }
 
 const DEFAULT_VERSE = '001'
-function transformScriptureStringtoBibleParam(scripture: string) {
+export function transformScriptureStringtoBibleParam(scripture: string) {
   // const scriptureSplit = scripture.split(' ', 2) // `2` limits the number of splits to 2
   const scriptureSplit = splitOnce(scripture, ' ') // splits only on first space (since there may be second space in multiple verses)
   const bookChapterVerse = scriptureSplit.pop() // get last item
@@ -184,45 +184,39 @@ function transformScriptureStringtoBibleParam(scripture: string) {
   // })
   return bibleParam
 }
-export function transformScripturetoBibleParam(
-  scripture: string | Partial<Scripture>
-) {
-  if (typeof scripture === 'string') {
-    return transformScriptureStringtoBibleParam(scripture)
-  } else {
-    const { bookName, chapter, verse, bibleParam: maybeBibleParam } = scripture
-    if (maybeBibleParam) {
-      return maybeBibleParam
-    }
-    if (!bookName || !chapter) {
-      if (!bookName && !chapter) {
+export function transformScripturetoBibleParam(scripture: Partial<Scripture>) {
+  const { bookName, chapter, verse, bibleParam: maybeBibleParam } = scripture
+  if (maybeBibleParam) {
+    return maybeBibleParam
+  }
+  if (!bookName || !chapter) {
+    if (!bookName && !chapter) {
+      console.log(
+        'transformScripturetoBibleParam: scripture object is missing bookName and chapter'
+      )
+    } else {
+      if (!bookName) {
         console.log(
-          'transformScripturetoBibleParam: scripture object is missing bookName and chapter'
+          'transformScripturetoBibleParam: scripture object is missing bookName'
         )
       } else {
-        if (!bookName) {
-          console.log(
-            'transformScripturetoBibleParam: scripture object is missing bookName'
-          )
-        } else {
-          console.log(
-            'transformScripturetoBibleParam: scripture object is missing chapter'
-          )
-        }
+        console.log(
+          'transformScripturetoBibleParam: scripture object is missing chapter'
+        )
       }
-      return ''
     }
-    // const bookNumber = books.indexOf(bookName) + 1 // TODO: check if bookNumber is on `scripture`
-    const bookNumber =
-      scripture.bookNumber ?? bookNameToBookMap[bookName as BookName].bookNumber
-    const bibleParam = `${String(bookNumber).padStart(2, '0')}${String(chapter).padStart(3, '0')}${verse ? `${verse}`.padStart(3, '0') : DEFAULT_VERSE}` // TODO: use getBibleParam
-    const bibleParam2 = getBibleParam({
-      bookNumber,
-      chapter,
-      verse,
-    })
-    return bibleParam
+    return ''
   }
+  // const bookNumber = books.indexOf(bookName) + 1 // TODO: check if bookNumber is on `scripture`
+  const bookNumber =
+    scripture.bookNumber ?? bookNameToBookMap[bookName as BookName].bookNumber
+  const bibleParam = `${String(bookNumber).padStart(2, '0')}${String(chapter).padStart(3, '0')}${verse ? `${verse}`.padStart(3, '0') : DEFAULT_VERSE}` // TODO: use getBibleParam
+  const bibleParam2 = getBibleParam({
+    bookNumber,
+    chapter,
+    verse,
+  })
+  return bibleParam
 }
 
 export function getScriptureUrl(

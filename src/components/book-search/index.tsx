@@ -14,6 +14,7 @@ import {
   transformScripturetoBibleParam,
   transformBibleParamToScripture,
   bookNames,
+  transformScriptureStringtoBibleParam,
 } from './lib'
 // import useHistory from '@/lib/useHistory'
 import useOpenScriptureUrl from './hooks/use-open-scripture-url'
@@ -199,7 +200,7 @@ export default function BookSearch({
     .flat()
 
   const createCustomCommand = (query: string) => {
-    const bibleParam = transformScripturetoBibleParam(query)
+    const bibleParam = transformScriptureStringtoBibleParam(query)
     if (bibleParam === '') {
       return null
     }
