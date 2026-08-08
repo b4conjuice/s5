@@ -245,7 +245,7 @@ export function getScriptureUrl(
   }
   const { bookNumber, chapter, verse } = scripture
   const wolBibleText = Array.isArray(verse)
-    ? `${bookNumber}/${chapter}#study=discover&v=${bookNumber}:${chapter}:${verse[0]}-${bookNumber}:${chapter}:${verse[1]}`
+    ? `${bookNumber}/${chapter}#v=${bookNumber}:${chapter}:${verse[0]}-${bookNumber}:${chapter}:${verse[1]}`
     : `${bookNumber}/${chapter}/${verse}`
 
   const scriptureUrlBase = scriptureUrlTypeToUrlMap[scriptureUrlType]
