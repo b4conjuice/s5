@@ -22,6 +22,18 @@ export function getBook(bookIdentifer: BookNumber | BookName) {
   }
 }
 
+function formatBibleParam({
+  bookNumber,
+  chapter = 1,
+  verse = 1,
+}: {
+  bookNumber: BookNumber | string | number
+  chapter?: number
+  verse?: number | [number, number]
+}) {
+  return `${String(bookNumber).padStart(2, '0')}${String(chapter).padStart(3, '0')}${verse.toString().padStart(3, '0')}`
+}
+
 export function getBibleParam({
   bookNumber,
   chapter,
@@ -29,9 +41,14 @@ export function getBibleParam({
 }: {
   bookNumber: BookNumber | string | number
   chapter?: number
-  verse?: number
+  verse?: number | [number, number]
 }) {
-  return `${bookNumber.toString().padStart(2, '0')}${(chapter ?? 1).toString().padStart(3, '0')}${(verse ?? 1).toString().padStart(3, '0')}`
+  if (Array.isArray(verse)) {
+    return verse
+      .map(v => formatBibleParam({ bookNumber, chapter, verse: v }))
+      .join('-')
+  }
+  return formatBibleParam({ bookNumber, chapter, verse })
 }
 
 function sliceScriptureFromBibleParam(bibleParam: string) {
@@ -170,18 +187,19 @@ export function transformScriptureStringtoBibleParam(scripture: string) {
     )
     return ''
   }
-  const bibleParam = verses
-    .map(
-      verse =>
-        `${String(bookNumber).padStart(2, '0')}${bookChapter.padStart(3, '0')}${verse.padStart(3, '0')}`
-    )
-    .join('-')
-  // TODO: use getBibleParam
-  // const bibleParam2 = getBibleParam({
-  //   bookNumber,
-  //   chapter,
-  //   verse: Number(verse),
-  // })
+  const verse: number | [number, number] | undefined =
+    verses.length === 0
+      ? undefined
+      : verses.length === 1
+        ? Number(verses[0])
+        : verses.length === 2
+          ? [Number(verses[0]), Number(verses[1])]
+          : undefined
+  const bibleParam = getBibleParam({
+    bookNumber,
+    chapter,
+    verse,
+  })
   return bibleParam
 }
 export function transformScripturetoBibleParam(scripture: Partial<Scripture>) {
@@ -207,11 +225,9 @@ export function transformScripturetoBibleParam(scripture: Partial<Scripture>) {
     }
     return ''
   }
-  // const bookNumber = books.indexOf(bookName) + 1 // TODO: check if bookNumber is on `scripture`
   const bookNumber =
     scripture.bookNumber ?? bookNameToBookMap[bookName as BookName].bookNumber
-  const bibleParam = `${String(bookNumber).padStart(2, '0')}${String(chapter).padStart(3, '0')}${verse ? `${verse}`.padStart(3, '0') : DEFAULT_VERSE}` // TODO: use getBibleParam
-  const bibleParam2 = getBibleParam({
+  const bibleParam = getBibleParam({
     bookNumber,
     chapter,
     verse,
