@@ -257,7 +257,7 @@ export default function BookSearch({
               ]
             : [...defaultCommands]
         }
-        placeholder='search books'
+        placeholder='search scripture: <book> <chapter>:<verse>'
         ref={searchRef}
         createCustomCommand={createCustomCommand}
         initialQuery={initialQuery}
