@@ -5,16 +5,27 @@ import { Cog6ToothIcon } from '@heroicons/react/20/solid'
 import BookSearch from '@/components/book-search'
 import Modal from '@/components/ui/modal'
 import SelectScriptureUrlType from '@/components/book-search/components/select-scripture-url-type'
+import Menu from '@/components/menu'
 
 export const Route = createFileRoute('/')({ component: Home })
 
 function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   return (
-    <main className='flex grow flex-col p-4'>
-      <div className='flex grow flex-col gap-4'>
-        <div className='flex justify-between'>
-          <h1 className='font-bold'>s5 🔍</h1>
+    <>
+      <main className='flex grow flex-col p-4'>
+        <div className='flex grow flex-col justify-between gap-4'>
+          <div className='flex justify-between'>
+            <h1 className='font-bold'>s5 🔍</h1>
+          </div>
+          <BookSearch />
+        </div>
+      </main>
+      <footer className='bg-cb-dusty-blue sticky bottom-0 flex items-center justify-between px-2 pt-2 pb-6'>
+        <div className='flex space-x-4'>
+          <Menu />
+        </div>
+        <div className='flex space-x-4'>
           <button
             type='button'
             onClick={() => {
@@ -32,10 +43,7 @@ function Home() {
             <SelectScriptureUrlType />
           </Modal>
         </div>
-        <div className='flex grow flex-col justify-end gap-4'>
-          <BookSearch />
-        </div>
-      </div>
-    </main>
+      </footer>
+    </>
   )
 }
