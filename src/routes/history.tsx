@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid'
 import { format } from 'date-fns'
 
@@ -54,14 +54,14 @@ function RouteComponent() {
                         >
                           <BookOpenIcon className='h-6 w-6' />
                         </Link> */}
-                        <Link
-                          to={url}
+                        <a
+                          href={url}
                           target='_blank'
                           rel='noopener noreferrer'
                           className='text-cb-pink hover:text-cb-pink/75 block truncate'
                         >
                           <ArrowTopRightOnSquareIcon className='h-6 w-6' />
-                        </Link>
+                        </a>
                       </div>
                     </li>
                   )
