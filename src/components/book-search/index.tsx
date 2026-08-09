@@ -18,6 +18,7 @@ import {
 } from './lib'
 // import useHistory from '@/lib/useHistory'
 import useOpenScriptureUrl from './hooks/use-open-scripture-url'
+import useHistory from './hooks/use-history'
 
 type Command = {
   id: string
@@ -159,7 +160,7 @@ export default function BookSearch({
   const onSelectBook = initialOnSelectBook ?? openScriptureUrl
   const internalSearchRef = useRef<HTMLInputElement | null>(null)
   const searchRef = initialSearchRef ?? internalSearchRef
-  // const { history, addHistory } = useHistory()
+  const { addHistory } = useHistory()
 
   const commands = bookNames
     .map((bookName, index) => {
@@ -188,7 +189,7 @@ export default function BookSearch({
           title: `${bookName} ${bookChapter}`,
           action: async () => {
             if (!disableAddToHistory) {
-              // addHistory(scripture)
+              addHistory(scripture)
             }
 
             onSelectBook(scripture)
@@ -213,7 +214,7 @@ export default function BookSearch({
       title: scripture.asString ?? '',
       action: async () => {
         if (!disableAddToHistory) {
-          // addHistory(scripture)
+          addHistory(scripture)
         }
         onSelectBook(scripture)
       },

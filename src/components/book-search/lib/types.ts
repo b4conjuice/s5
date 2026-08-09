@@ -17,3 +17,8 @@ export type ScriptureUrlType = keyof typeof scriptureUrlTypeToUrlMap
 export type ScriptureUrl = (typeof scriptureUrlTypeToUrlMap)[ScriptureUrlType]
 // export const scriptureUrlTypes = ['jwlibrary', 'jworg', 'wol']
 // export type ScriptureUrl = (typeof scriptureUrlTypes)[number]
+
+export type HistoryEntry = {
+  bibleParam: string
+  date: Date
+}
