@@ -143,11 +143,16 @@ function splitOnce(str: string, separator: string) {
 
 const DEFAULT_VERSE = '001'
 export function transformScriptureStringtoBibleParam(scripture: string) {
-  // const scriptureSplit = scripture.split(' ', 2) // `2` limits the number of splits to 2
-  const scriptureSplit = splitOnce(scripture, ' ') // splits only on first space (since there may be second space in multiple verses)
-  const bookChapterVerse = scriptureSplit.pop() // get last item
-  const bookName = scriptureSplit.join(' ') as BookName
-  const [bookChapter, bookVerse] = bookChapterVerse?.split(':') ?? []
+  const scriptureSplitByColon = scripture.split(':')
+  const bookVerse =
+    scriptureSplitByColon.length > 1 ? scriptureSplitByColon.pop() : undefined
+  const bookAndChapter = [...scriptureSplitByColon].join(' ')
+  const bookAndChapterSplitBySpace = bookAndChapter.split(' ')
+  const bookChapter =
+    bookAndChapterSplitBySpace.length > 1
+      ? bookAndChapterSplitBySpace.pop()
+      : undefined
+  const bookName = bookAndChapterSplitBySpace.join(' ')
 
   if (!bookName || !bookChapter) {
     // TODO: review bookName
@@ -164,7 +169,7 @@ export function transformScriptureStringtoBibleParam(scripture: string) {
     return ''
   }
 
-  const bookIndex = findBookIndex(bookName) // TODO: use getBook?
+  const bookIndex = findBookIndex(bookName as BookName) // TODO: use getBook?
   if (bookIndex < 0) {
     console.log(
       `transformScriptureStringtoBibleParam: bookName '${bookName}' not found`
