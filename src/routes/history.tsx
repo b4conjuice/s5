@@ -1,33 +1,51 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { CheckIcon, TrashIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import {
+  ArrowUpTrayIcon,
+  CheckIcon,
+  TrashIcon,
+  XMarkIcon,
+} from '@heroicons/react/20/solid'
 
 import HistoryList from '@/components/history-list'
 import Menu from '@/components/menu'
 import useHistory from '@/components/book-search/hooks/use-history'
 import Modal from '@/components/ui/modal'
+import type { HistoryEntry } from '@/components/book-search/lib/types'
 
 export const Route = createFileRoute('/history')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
+  const [importText, setImportText] = useState('')
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
-  const { history, clearHistory } = useHistory() // TODO: use history in history-list
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false)
+  const { history, clearHistory, setHistory } = useHistory() // TODO: use history in history-list
   return (
     <>
       <main className='flex grow flex-col p-4'>
         <div className='flex grow flex-col justify-between gap-4'>
-          <div className='flex items-center space-x-4'>
-            <h1 className='font-bold'>history</h1>
+          <div className='flex items-center justify-between'>
+            <div className='flex items-center space-x-4'>
+              <h1 className='font-bold'>history</h1>
+              <button
+                className='text-red-700 hover:text-red-700/75'
+                type='button'
+                onClick={() => {
+                  setIsConfirmModalOpen(true)
+                }}
+              >
+                <TrashIcon className='h-6 w-6' />
+              </button>
+            </div>
             <button
-              className='text-red-700 hover:text-red-700/75'
               type='button'
               onClick={() => {
-                setIsConfirmModalOpen(true)
+                setIsExportModalOpen(true)
               }}
             >
-              <TrashIcon className='h-6 w-6' />
+              <ArrowUpTrayIcon className='h-6 w-6' />
             </button>
           </div>
           <div className='flex flex-grow flex-col justify-between space-y-4'>
@@ -63,6 +81,48 @@ function RouteComponent() {
             <XMarkIcon className='h-6 w-6' />
           </button>
         </div>
+      </Modal>
+      <Modal
+        isOpen={isExportModalOpen}
+        setIsOpen={setIsExportModalOpen}
+        title='import/export history'
+      >
+        {history.length > 0 && (
+          <>
+            <textarea
+              className='bg-cobalt w-full p-4'
+              defaultValue={JSON.stringify(history)}
+            />
+            <button
+              onClick={async () => {
+                // await copyToClipboard(btoa(JSON.stringify(history)))
+                // toast.success('copied export code to clipboard')
+              }}
+            >
+              export
+            </button>
+            <hr className='border-cb-white/25' />
+          </>
+        )}
+        <textarea
+          className='bg-cobalt w-full p-4'
+          value={importText}
+          onChange={e => {
+            setImportText(e.target.value)
+          }}
+        />
+        <button
+          onClick={() => {
+            const newHistory = JSON.parse(importText) as HistoryEntry[]
+            setHistory(newHistory)
+            // toast.success('updated history')
+            setImportText('')
+          }}
+          disabled={!importText}
+          className='disabled:pointer-events-none disabled:opacity-25'
+        >
+          import
+        </button>
       </Modal>
     </>
   )
