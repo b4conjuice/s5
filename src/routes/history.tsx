@@ -1,17 +1,13 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import {
-  ArrowUpTrayIcon,
-  CheckIcon,
-  TrashIcon,
-  XMarkIcon,
-} from '@heroicons/react/20/solid'
+import { ArrowUpTrayIcon, TrashIcon } from '@heroicons/react/20/solid'
 
 import HistoryList from '@/components/history-list'
 import Menu from '@/components/menu'
 import useHistory from '@/components/book-search/hooks/use-history'
 import Modal from '@/components/ui/modal'
 import type { HistoryEntry } from '@/components/book-search/lib/types'
+import ConfirmModal from '@/components/confirm-modal'
 
 export const Route = createFileRoute('/history')({
   component: RouteComponent,
@@ -59,29 +55,16 @@ function RouteComponent() {
         </div>
         <div className='flex space-x-4'></div>
       </footer>
-      <Modal
+      <ConfirmModal
         isOpen={isConfirmModalOpen}
         setIsOpen={setIsConfirmModalOpen}
         title='are you sure you want to clear history?'
+        action={() => {
+          clearHistory()
+        }}
       >
-        <div className='flex space-x-4'>
-          <button
-            onClick={() => {
-              clearHistory()
-              setIsConfirmModalOpen(false)
-            }}
-          >
-            <CheckIcon className='h-6 w-6' />
-          </button>
-          <button
-            onClick={() => {
-              setIsConfirmModalOpen(false)
-            }}
-          >
-            <XMarkIcon className='h-6 w-6' />
-          </button>
-        </div>
-      </Modal>
+        <p>this cannot be undone</p>
+      </ConfirmModal>
       <Modal
         isOpen={isExportModalOpen}
         setIsOpen={setIsExportModalOpen}
