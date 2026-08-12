@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as BooksIndexRouteImport } from './routes/books/index'
 import { Route as BooksBookNumberRouteImport } from './routes/books/$bookNumber'
+import { Route as ApiOSplatRouteImport } from './routes/api.o.$'
+import { Route as ApiSSplatRouteImport } from './routes/api/s/$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,18 +36,32 @@ const BooksBookNumberRoute = BooksBookNumberRouteImport.update({
   path: '/books/$bookNumber',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiOSplatRoute = ApiOSplatRouteImport.update({
+  id: '/api/o/$',
+  path: '/api/o/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSSplatRoute = ApiSSplatRouteImport.update({
+  id: '/api/s/$',
+  path: '/api/s/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/history': typeof HistoryRoute
   '/books/$bookNumber': typeof BooksBookNumberRoute
   '/books/': typeof BooksIndexRoute
+  '/api/o/$': typeof ApiOSplatRoute
+  '/api/s/$': typeof ApiSSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/history': typeof HistoryRoute
   '/books/$bookNumber': typeof BooksBookNumberRoute
   '/books': typeof BooksIndexRoute
+  '/api/o/$': typeof ApiOSplatRoute
+  '/api/s/$': typeof ApiSSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +69,29 @@ export interface FileRoutesById {
   '/history': typeof HistoryRoute
   '/books/$bookNumber': typeof BooksBookNumberRoute
   '/books/': typeof BooksIndexRoute
+  '/api/o/$': typeof ApiOSplatRoute
+  '/api/s/$': typeof ApiSSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/history' | '/books/$bookNumber' | '/books/'
+  fullPaths:
+    | '/'
+    | '/history'
+    | '/books/$bookNumber'
+    | '/books/'
+    | '/api/o/$'
+    | '/api/s/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/history' | '/books/$bookNumber' | '/books'
-  id: '__root__' | '/' | '/history' | '/books/$bookNumber' | '/books/'
+  to:
+    '/' | '/history' | '/books/$bookNumber' | '/books' | '/api/o/$' | '/api/s/$'
+  id:
+    | '__root__'
+    | '/'
+    | '/history'
+    | '/books/$bookNumber'
+    | '/books/'
+    | '/api/o/$'
+    | '/api/s/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +99,8 @@ export interface RootRouteChildren {
   HistoryRoute: typeof HistoryRoute
   BooksBookNumberRoute: typeof BooksBookNumberRoute
   BooksIndexRoute: typeof BooksIndexRoute
+  ApiOSplatRoute: typeof ApiOSplatRoute
+  ApiSSplatRoute: typeof ApiSSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +133,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BooksBookNumberRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/o/$': {
+      id: '/api/o/$'
+      path: '/api/o/$'
+      fullPath: '/api/o/$'
+      preLoaderRoute: typeof ApiOSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/s/$': {
+      id: '/api/s/$'
+      path: '/api/s/$'
+      fullPath: '/api/s/$'
+      preLoaderRoute: typeof ApiSSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +155,8 @@ const rootRouteChildren: RootRouteChildren = {
   HistoryRoute: HistoryRoute,
   BooksBookNumberRoute: BooksBookNumberRoute,
   BooksIndexRoute: BooksIndexRoute,
+  ApiOSplatRoute: ApiOSplatRoute,
+  ApiSSplatRoute: ApiSSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
