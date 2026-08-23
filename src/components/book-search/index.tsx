@@ -148,6 +148,7 @@ export default function BookSearch({
   onSelectBook: initialOnSelectBook,
   initialQuery,
   disableAddToHistory,
+  placeholder = '<book> <chapter>:<verse> (Gen 1:1)',
 }: {
   searchRef?: React.RefObject<HTMLInputElement | null>
   showRecentCommands?: boolean
@@ -155,6 +156,7 @@ export default function BookSearch({
   onSelectBook?: (scripture: Scripture) => void
   initialQuery?: string
   disableAddToHistory?: boolean
+  placeholder?: string
 }) {
   const openScriptureUrl = useOpenScriptureUrl()
   const onSelectBook = initialOnSelectBook ?? openScriptureUrl
@@ -258,7 +260,7 @@ export default function BookSearch({
               ]
             : [...defaultCommands]
         }
-        placeholder='<book> <chapter>:<verse> (Gen 1:1)'
+        placeholder={placeholder}
         ref={searchRef}
         createCustomCommand={createCustomCommand}
         initialQuery={initialQuery}
