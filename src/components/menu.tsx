@@ -11,6 +11,7 @@ const nav = [
   { text: 'home', href: '/' },
   // { text: 'books', href: '/books' },
   { text: 'history', href: '/history' },
+  { text: 'new list', href: '/lists/new' },
 ]
 
 export default function Menu() {

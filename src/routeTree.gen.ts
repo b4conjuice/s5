@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as BooksIndexRouteImport } from './routes/books/index'
 import { Route as BooksBookNumberRouteImport } from './routes/books/$bookNumber'
+import { Route as ListsNewRouteImport } from './routes/lists.new'
 import { Route as ApiOSplatRouteImport } from './routes/api.o.$'
 import { Route as ApiSSplatRouteImport } from './routes/api/s/$'
 
@@ -36,6 +37,11 @@ const BooksBookNumberRoute = BooksBookNumberRouteImport.update({
   path: '/books/$bookNumber',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ListsNewRoute = ListsNewRouteImport.update({
+  id: '/lists/new',
+  path: '/lists/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiOSplatRoute = ApiOSplatRouteImport.update({
   id: '/api/o/$',
   path: '/api/o/$',
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/history': typeof HistoryRoute
   '/books/$bookNumber': typeof BooksBookNumberRoute
+  '/lists/new': typeof ListsNewRoute
   '/books/': typeof BooksIndexRoute
   '/api/o/$': typeof ApiOSplatRoute
   '/api/s/$': typeof ApiSSplatRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/history': typeof HistoryRoute
   '/books/$bookNumber': typeof BooksBookNumberRoute
+  '/lists/new': typeof ListsNewRoute
   '/books': typeof BooksIndexRoute
   '/api/o/$': typeof ApiOSplatRoute
   '/api/s/$': typeof ApiSSplatRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/history': typeof HistoryRoute
   '/books/$bookNumber': typeof BooksBookNumberRoute
+  '/lists/new': typeof ListsNewRoute
   '/books/': typeof BooksIndexRoute
   '/api/o/$': typeof ApiOSplatRoute
   '/api/s/$': typeof ApiSSplatRoute
@@ -78,17 +87,25 @@ export interface FileRouteTypes {
     | '/'
     | '/history'
     | '/books/$bookNumber'
+    | '/lists/new'
     | '/books/'
     | '/api/o/$'
     | '/api/s/$'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/history' | '/books/$bookNumber' | '/books' | '/api/o/$' | '/api/s/$'
+    | '/'
+    | '/history'
+    | '/books/$bookNumber'
+    | '/lists/new'
+    | '/books'
+    | '/api/o/$'
+    | '/api/s/$'
   id:
     | '__root__'
     | '/'
     | '/history'
     | '/books/$bookNumber'
+    | '/lists/new'
     | '/books/'
     | '/api/o/$'
     | '/api/s/$'
@@ -98,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HistoryRoute: typeof HistoryRoute
   BooksBookNumberRoute: typeof BooksBookNumberRoute
+  ListsNewRoute: typeof ListsNewRoute
   BooksIndexRoute: typeof BooksIndexRoute
   ApiOSplatRoute: typeof ApiOSplatRoute
   ApiSSplatRoute: typeof ApiSSplatRoute
@@ -133,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BooksBookNumberRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lists/new': {
+      id: '/lists/new'
+      path: '/lists/new'
+      fullPath: '/lists/new'
+      preLoaderRoute: typeof ListsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/o/$': {
       id: '/api/o/$'
       path: '/api/o/$'
@@ -154,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HistoryRoute: HistoryRoute,
   BooksBookNumberRoute: BooksBookNumberRoute,
+  ListsNewRoute: ListsNewRoute,
   BooksIndexRoute: BooksIndexRoute,
   ApiOSplatRoute: ApiOSplatRoute,
   ApiSSplatRoute: ApiSSplatRoute,
