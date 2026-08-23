@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useRef } from 'react'
-import { DocumentDuplicateIcon } from '@heroicons/react/20/solid'
+import { DocumentDuplicateIcon, TrashIcon } from '@heroicons/react/20/solid'
 import { useCopyToClipboard, useLocalStorage } from '@uidotdev/usehooks'
 
 import BookSearch from '@/components/book-search'
@@ -12,6 +12,11 @@ export const Route = createFileRoute('/lists/new')({
   component: RouteComponent,
 })
 
+const DEFAULT_LIST = {
+  title: '',
+  items: [],
+}
+
 function RouteComponent() {
   const [copiedText, copyToClipboard] = useCopyToClipboard()
   const searchRef = useRef<HTMLInputElement | null>(null)
@@ -19,7 +24,7 @@ function RouteComponent() {
   const [list, setList] = useLocalStorage<{
     title: string
     items: string[]
-  }>('s5-new-list', { title: '', items: [] })
+  }>('s5-new-list', DEFAULT_LIST)
   const title = list.title
   const items = list.items
   const canSave = list.title !== '' && items.length > 0
@@ -64,6 +69,16 @@ function RouteComponent() {
             <Menu />
           </div>
           <div className='flex space-x-4'>
+            <button
+              className='flex w-full justify-center text-red-700 hover:text-red-700 disabled:pointer-events-none disabled:opacity-25'
+              type='button'
+              onClick={() => {
+                setList(DEFAULT_LIST)
+              }}
+              disabled={!canSave}
+            >
+              <TrashIcon className='h-6 w-6' />
+            </button>
             <button
               className='text-cb-yellow hover:text-cb-yellow flex w-full justify-center disabled:pointer-events-none disabled:opacity-25'
               type='button'
