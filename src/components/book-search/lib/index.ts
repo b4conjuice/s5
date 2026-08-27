@@ -96,6 +96,12 @@ export function transformBibleParamToScripture(bibleParam: string) {
   const { bookNumber, chapter, verse } =
     sliceScriptureFromBibleParam(bibleParam)
   const book = bookNumberToBookMap[bookNumber]
+  if (!book) {
+    console.log(
+      `transformBibleParamToScripture: invalid bibleParam ${bibleParam}: bookNumber ${bookNumber} not found`
+    )
+    return ''
+  }
   const bookName = book.name
   // if (!bookName) { // TODO: confirm if this is needed
   //   console.log(

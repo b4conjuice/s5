@@ -27,6 +27,8 @@ type Command = {
   bookName: string
 }
 
+type CustomCommand = (query: string) => Command | null
+
 const SHORTCUT_KEY = 'k'
 
 function CommandPalette({
@@ -34,14 +36,14 @@ function CommandPalette({
   defaultCommands,
   placeholder = 'search commands',
   ref,
-  createCustomCommand,
+  createCustomCommands,
   initialQuery,
 }: {
   commands: Command[]
   defaultCommands: Command[]
   placeholder?: string
   ref: React.RefObject<HTMLInputElement | null>
-  createCustomCommand?: (query: string) => Command | null
+  createCustomCommands?: CustomCommand[]
   initialQuery?: string
 }) {
   const [query, setQuery] = useState(initialQuery ?? '')
@@ -66,10 +68,15 @@ function CommandPalette({
     keys: ['bookName', 'id', 'title'],
   })
 
-  const customCommand =
-    createCustomCommand && query !== '' ? createCustomCommand(query) : null
+  const customCommands = (
+    query !== '' && createCustomCommands !== undefined
+      ? createCustomCommands.map(createCustomCommand =>
+          createCustomCommand(query)
+        )
+      : []
+  )?.filter(customCommand => customCommand !== null)
   const filteredCommands = [
-    ...(query.length > 0 && customCommand ? [customCommand] : []),
+    ...(query.length > 0 ? customCommands : []),
     ...(!query
       ? defaultCommands
       : fuse.search(query.toLowerCase()).map(({ item }) => item)),
@@ -224,6 +231,29 @@ export default function BookSearch({
     }
     return customCommand
   }
+  const selectScriptureByBibleParam = (query: string) => {
+    const scripture = transformBibleParamToScripture(query)
+    if (scripture === '') {
+      return null
+    }
+    const bibleParam = query
+    return {
+      id: `select-scripture-by-bibleParam-${bibleParam}`,
+      title: `${bibleParam}${`${scripture.asString ? ` - ${scripture.asString}` : ''}`}`,
+      action: async () => {
+        if (!disableAddToHistory) {
+          addHistory(scripture)
+        }
+        onSelectBook(scripture)
+      },
+      bookName: scripture.bookName,
+    }
+  }
+
+  const createCustomCommands = [
+    createCustomCommand,
+    selectScriptureByBibleParam,
+  ]
 
   // const recentCommands =
   //   history?.slice(0, RECENT_COMMANDS_COUNT).map(({ scripture }) => ({
@@ -262,7 +292,7 @@ export default function BookSearch({
         }
         placeholder={placeholder}
         ref={searchRef}
-        createCustomCommand={createCustomCommand}
+        createCustomCommands={createCustomCommands}
         initialQuery={initialQuery}
       />
     </>
