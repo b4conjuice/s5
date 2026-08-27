@@ -12,6 +12,7 @@ const nav = [
   // { text: 'books', href: '/books' },
   { text: 'history', href: '/history' },
   { text: 'new list', href: '/lists/new' },
+  { text: 'new gem', href: '/gems/new' },
 ]
 
 export default function Menu() {
