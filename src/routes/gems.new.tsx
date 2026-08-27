@@ -25,6 +25,10 @@ function RouteComponent() {
     useLocalStorage<Scripture | null>('sfour-selected-scripture', null)
   const textarea = useTextarea({ text, setText })
   const canSave = text !== '' && selectedScripture !== null
+  const clearGem = () => {
+    setText('')
+    setSelectedScripture(null)
+  }
   return (
     <>
       <main className='flex grow flex-col'>
@@ -71,6 +75,7 @@ function RouteComponent() {
               onClick={async () => {
                 if (selectedScripture !== null) {
                   await copyToClipboard(text)
+                  clearGem()
                   window.open(
                     NEW_GEM_URL(selectedScripture.bibleParam),
                     '_blank'
@@ -88,8 +93,7 @@ function RouteComponent() {
         isOpen={isConfirmModalOpen}
         setIsOpen={setIsConfirmModalOpen}
         action={() => {
-          setText('')
-          setSelectedScripture(null)
+          clearGem()
         }}
       >
         are you sure clear the gem?
