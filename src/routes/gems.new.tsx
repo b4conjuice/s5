@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid'
+import { ArrowDownOnSquareIcon, TrashIcon } from '@heroicons/react/20/solid'
 import { useCopyToClipboard, useLocalStorage } from '@uidotdev/usehooks'
 
 import BookSearch from '@/components/book-search'
@@ -79,7 +79,7 @@ function RouteComponent() {
               }}
               disabled={!canSave}
             >
-              <PencilSquareIcon className='h-6 w-6' />
+              <ArrowDownOnSquareIcon className='h-6 w-6' />
             </button>
           </div>
         </div>
